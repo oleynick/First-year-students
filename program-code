@@ -1,0 +1,132 @@
+// Block of classes. Class #Humans help us creates the any human with some name and age.  
+
+class Humans {constructor(name, age) {
+                 this._name = name;
+                 this._age = age;}
+
+          get name() {return this._name;}
+          get age() {return this._age;}
+                                        }
+                                        
+// Class #Students help us to create comunity of first-year students with their own characteristics. Some of them like of any human. Some of them - performance and presence like of students.
+
+class Students extends Humans {constructor(name, age, performance, presence) {
+                super(name);
+                this._age = age;	
+                this._performance = performance;
+                this._presence = presence;} 
+
+                get performance() {return this._performance;}
+                get presence() {return this._presence;}
+                                                        }
+// Class #Professors describes teachers at university. Name, age, subject etc. Proffessor can do rollcall for some group of students.
+
+class Professors extends Humans {constructor(name, age, subject, Student) {
+                super(name);
+                this._age = age;	
+                this._subject = subject;
+                this._Student = Student;} 
+  
+                get subject() {return this._subject;}
+  
+                rollcallP() {
+                    let presArr=[];
+                      for (i=0; i<20; i++){
+                            if (this._Student[i]['presence'] >= 3)
+                                {presArr.push(this._Student[i]);}
+                                                                  }
+      
+                 return presArr;}
+  
+              rollcallA() {
+                  let absArr=[]; 
+                      for (i=0; i<20; i++){
+                            if (this._Student[i]['presence'] < 3)
+                                    {absArr.push(this._Student[i]);}       
+                                                                    }
+                return absArr;}
+                                                                        }
+
+// Class #Group creates a group of students and assign some group number. This class provides the choise of monitor at students's group. 
+
+class Group {constructor(student, num) {
+              this._student = student;
+              this._num = num;} 
+  
+              get num() {return this._num;}
+              get student() {return this._student;}
+    
+              monitor() {
+                let level = this._student[0]['performance'];
+                let k=0;
+                      for (i=1; i<20; i++){
+                          if (this._student[i]['performance'] >= level)
+                              {level = this._student[i]['performance'];
+                                k = i;}
+                                                                          }
+   
+                let s=0;
+                let p=0;
+                      for (i=0; i<20; i++){
+                          if (this._student[i]['performance'] === level && s < this._student[i]['age'])
+                              {s = this._student[i]['age'];
+                                    p = i;}
+                                                                          }
+         
+                let t=0;
+                let y=0;
+                    for (i=0; i<20; i++){
+                          if (this._student[i]['performance'] === level && this._student[i]['age'] === s && this._student[i]['presence'] > t)
+                              {t = this._student[i]['presence'];
+                                  y = i;}
+                                                                          }
+               return this._student[y];}
+   
+                                                                                      }
+// Block of arrays and variables. Provides the data area for creation of students, professors anf groups.
+
+          arrSubj = ['Physics', 'Mathematics', 'Electronics', 'Programming', 'Economics'];
+
+          NumGroup = Math.floor(Math.random()*1000);
+         
+          arrName = ['Alex','Viktor','Sergiy','Andriy','Mikola','Ganna','Tetyana','Rita','Olena','Mira'];
+
+          arrAge = [16,17,18,19,20,21,19,18,17,16];
+
+
+// Block that creates needed objects with help of classes
+
+
+          Student = [];
+
+          for (i=0; i<20; i++) {
+                  const StudentGroup = new Students(arrName[Math.floor(Math.random()*10)], arrAge[Math.floor(Math.random()*10)],Math.floor(Math.random()*10), Math.floor(Math.random()*10) );
+Student[i] = StudentGroup;};
+
+          const groupToday = new Group(Student, NumGroup);
+
+          const Professor = new Professors( arrName[Math.floor(Math.random()*10)], arrAge[Math.floor(Math.random()*10)]+30,arrSubj[Math.floor(Math.random()*5)], Student);
+
+// Block of information output
+
+console.log();
+console.log('Students choose the monitor at group number');
+console.log(groupToday.num);
+console.log();
+console.log(groupToday.monitor());
+console.log();
+console.log('Professor:');
+console.log(Professor.name);
+console.log();
+console.log('Subject:');
+console.log(Professor.subject);
+console.log();
+console.log('Today present:');
+console.log(Professor.rollcallP().length);
+console.log();
+console.log(Professor.rollcallP());
+console.log();
+console.log('Today absent:');
+console.log(Professor.rollcallA().length);
+console.log();
+console.log(Professor.rollcallA());

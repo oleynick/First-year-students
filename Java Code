@@ -1,0 +1,214 @@
+package com.company;
+
+public class Group {
+    int num;
+    int[] pres;
+    int[] perf;
+    String[] name;
+    int[] age;
+
+    public Group(String[] name, int[] age, int[] perf, int[] pres, int num) {
+        this.name = name;
+        this.age = age;
+        this.num = num;
+        this.pres = pres;
+        this.perf = perf;
+    }
+    public int getNum() {
+        return this.num;
+    }
+
+    public int[] getPresc() {
+        return this.pres;
+    }
+
+    public int[] getPerf() {
+        return this.perf;
+    }
+
+    public String[] getName() {
+        return this.name;
+    }
+
+    public int[] getAge() {
+        return this.age;
+    }
+
+    public int monitor() {
+        int level = perf[0];
+        int k=0;
+        for (int i=1; i<20; i++){
+            if (perf[i] >= level)
+            {level = perf[i];
+                k = i;}
+        }
+
+        int s=0;
+        int p=0;
+        for (int i=0; i<20; i++){
+            if (perf[i] == level && s < age[i])
+            {s = age[i];
+                p = i;}
+        }
+
+        int t=0;
+        int y=0;
+        for (int i=0; i<20; i++){
+            if (perf[i] == level && age[i] == s && pres[i] > t)
+            {t = pres[i];
+                y = i;}
+        }
+        return y;}
+}
+
+public class Humans {
+    String name;
+    int age;
+
+    public Humans(String name, int age) {
+       this.name = name;
+        this.age = age;
+    }
+
+   public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    }
+
+
+import java.util.ArrayList;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        String[] arrSubj = {"Physics", "Mathematics", "Electronics", "Programming", "Economics"};
+        int NumGroup = (int)Math.floor(Math.random()*1000);
+        String[] arrName = {"Alex","Viktor","Sergiy","Andriy","Mikola","Ganna","Tetyana","Rita","Olena","Mira"};
+        int[] arrAge = {16,17,18,19,20,21,19,18,17,16};
+
+        ArrayList<Students> Student = new ArrayList<Students>();
+
+        int[] pres = new int[20];
+        int[] perf = new int[20];
+        int[] ageS = new int[20];
+        String[] nameS = new String[20];
+
+        for (int i=0; i<20; i++) {
+            Students StudentGroup = new Students(arrName[(int)Math.floor(Math.random()*10)], arrAge[(int)Math.floor(Math.random()*10)],(int)Math.floor(Math.random()*10), (int)Math.floor(Math.random()*10) );
+            pres[i] = StudentGroup.presence;
+            perf[i] = StudentGroup.performance;
+            ageS[i] = StudentGroup.age;
+            nameS[i] = StudentGroup.name;
+            Student.add(StudentGroup);};
+
+        Group groupToday = new Group(nameS, ageS, perf, pres, NumGroup);
+
+        Professors Professor = new Professors(arrName[(int)Math.floor(Math.random()*10)],arrAge[(int)Math.floor(Math.random()*10)]+30,arrSubj[(int)Math.floor(Math.random()*5)], pres, perf);
+
+        System.out.println();
+        System.out.println("Students choose the monitor at group number " + groupToday.num);
+        System.out.println();
+        System.out.println(nameS[groupToday.monitor()] + ", Age: " + ageS[groupToday.monitor()] + ", Performance: " +  perf[groupToday.monitor()]);
+        System.out.println();
+        System.out.println("Professor: " + Professor.name);
+        System.out.println();
+        System.out.println("Subject: " + Professor.subject);
+        System.out.println();
+        System.out.println("Today present:"  + Professor.rollcallP().length + " students");
+        System.out.println();
+        for (int i=0; i<Professor.rollcallP().length; i++)
+        {System.out.println(nameS[Professor.rollcallP()[i]] + ", Age: " + ageS[Professor.rollcallP()[i]] + ", Performance: " +  perf[Professor.rollcallP()[i]]);};
+
+        System.out.println();
+        System.out.println("Today absent: " + Professor.rollcallA().length + " students");
+        System.out.println();
+        for (int i=0; i<Professor.rollcallA().length; i++)
+        {System.out.println(nameS[Professor.rollcallA()[i]] + ", Age: " + ageS[Professor.rollcallA()[i]] + ", Performance: " +  perf[Professor.rollcallA()[i]]);};
+     }
+}
+
+import java.util.ArrayList;
+
+public class Professors extends Humans {
+    String subject;
+    int[] pres;
+    int[] perf;
+
+    public Professors(String name, int age, String subject, int[] pres, int[] perf) {
+        super(name, age);
+        this.subject = subject;
+        this.pres = pres;
+        this.perf = perf;
+    }
+    public String getSubject() {
+        return this.subject;
+    }
+
+    public int[] getPresc() {
+        return this.pres;
+    }
+
+    public int[] getPerf() {
+        return this.perf;
+    }
+
+   public int[] rollcallP() {
+       ArrayList<Integer> rallcall = new ArrayList<>();
+        for (int i=0; i<20; i++){
+            if (this.pres[i] >= 3)
+
+            {rallcall.add(i);}
+        }
+       int[] rallcallP = new int[rallcall.size()];
+       for (int i=0; i<rallcall.size(); i++){
+           rallcallP[i] = rallcall.get(i);
+       }
+       return rallcallP; }
+
+    public int[] rollcallA() {
+        ArrayList<Integer> rallcal = new ArrayList<>();
+        for (int i=0; i<20; i++){
+            if (this.pres[i] < 3)
+
+            {rallcal.add(i);}
+        }
+        int[] rallcallA = new int[rallcal.size()];
+        for (int i=0; i<rallcal.size(); i++){
+            rallcallA[i] = rallcal.get(i);
+        }
+        return rallcallA;
+       }
+}
+
+public class Students extends Humans {
+    int performance;
+    int presence;
+
+    public Students(String name, int age, int performance, int presence) {
+        super(name, age);
+        this.performance = performance;
+        this.presence = presence;
+    }
+
+    public int getPerformance() {
+        return this.performance;
+    }
+
+    public int getPresence() {
+        return this.presence;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public int getAge() {
+        return this.age;
+    }
+}
